@@ -80,11 +80,11 @@ body {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--ring);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
+  background: var(--primary);
 }
 
 /* Animations */

@@ -47,7 +47,7 @@ export default function About() {
               {/* Timeline Item 1: Internship */}
               <div className="relative">
                 {/* Bullet node */}
-                <div className="absolute -left-[33px] top-1.5 w-4.5 h-4.5 rounded-full bg-background border-4 border-primary flex items-center justify-center shadow-xs" />
+                <div className="absolute left-[-33px] top-1.5 w-4.5 h-4.5 rounded-full bg-background border-4 border-primary flex items-center justify-center shadow-xs" />
 
                 <div className="glass-panel border border-glass-border p-6 rounded-2xl shadow-xs transition-all duration-300 hover:shadow-md hover:border-primary/20">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
