@@ -2,16 +2,26 @@
 
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    const isDark = document.documentElement.classList.contains("dark");
-    setTheme(isDark ? "dark" : "light");
+    requestAnimationFrame(() => {
+      setMounted(true);
+    });
   }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      const isDark = document.documentElement.classList.contains("dark");
+      requestAnimationFrame(() => {
+        setTheme(isDark ? "dark" : "light");
+      });
+    }
+  }, [mounted]);
 
   const toggleTheme = () => {
     if (theme === "light") {
@@ -32,18 +42,29 @@ export default function ThemeToggle() {
   }
 
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       onClick={toggleTheme}
       className="p-2 rounded-lg bg-secondary/80 hover:bg-secondary-foreground/10 text-foreground transition-all duration-300 border border-border flex items-center justify-center cursor-pointer relative overflow-hidden group shadow-xs"
       aria-label="Toggle Theme"
     >
-      <div className="relative w-5 h-5 flex items-center justify-center">
-        {theme === "dark" ? (
-          <Sun className="w-5 h-5 text-amber-400 transition-transform duration-500 rotate-0 scale-100 group-hover:rotate-45" />
-        ) : (
-          <Moon className="w-5 h-5 text-indigo-600 transition-transform duration-500 rotate-0 scale-100 group-hover:-rotate-12" />
-        )}
-      </div>
-    </button>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={theme}
+          initial={{ y: -20, opacity: 0, rotate: -45 }}
+          animate={{ y: 0, opacity: 1, rotate: 0 }}
+          exit={{ y: 20, opacity: 0, rotate: 45 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+          className="relative w-5 h-5 flex items-center justify-center"
+        >
+          {theme === "dark" ? (
+            <Sun className="w-5 h-5 text-amber-400" />
+          ) : (
+            <Moon className="w-5 h-5 text-indigo-600" />
+          )}
+        </motion.div>
+      </AnimatePresence>
+    </motion.button>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Star, GitFork, BookOpen, ExternalLink, Activity } from "lucide-react";
 import { Github } from "@/components/icons";
+import { motion } from "motion/react";
 
 interface Repo {
   id: number;
@@ -13,6 +14,24 @@ interface Repo {
   forks_count: number;
   language: string;
 }
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-100px" },
+  transition: { duration: 0.5 }
+};
+
+const staggerContainer = {
+  initial: { opacity: 0 },
+  whileInView: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  },
+  viewport: { once: true, margin: "-100px" }
+};
 
 // Language → color mapping (GitHub colors)
 const LANG_COLORS: Record<string, string> = {
@@ -64,20 +83,25 @@ export default function GithubRepos() {
 
       <div className="max-w-6xl mx-auto px-6">
         {/* Section Header */}
-        <div className="flex flex-col items-center text-center mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center text-center mb-24"
+        >
           <div className="section-label">
             <Activity className="w-3 h-3" />
             Open Source
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 flex items-center gap-3 justify-center">
-            <Github className="w-8 h-8 text-foreground" />
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6">
             Live GitHub Activity
           </h2>
-          <p className="text-muted text-base max-w-md leading-relaxed">
-            My recently updated repositories, pulled dynamically via the GitHub API.
+          <p className="text-muted text-lg max-w-2xl leading-relaxed text-balance">
+            Real-time feed of my latest coding activity, dynamically fetched via the GitHub API.
           </p>
-          <div className="w-12 h-1 bg-gradient-to-r from-primary to-accent rounded-full mt-5" />
-        </div>
+          <div className="w-16 h-1 bg-gradient-to-r from-primary to-accent rounded-full mt-8" />
+        </motion.div>
 
         {/* Loading skeletons */}
         {loading && (
@@ -131,59 +155,65 @@ export default function GithubRepos() {
         {/* Repositories grid */}
         {!loading && !error && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <motion.div 
+              variants={staggerContainer}
+              initial="initial"
+              whileInView="whileInView"
+              viewport={{ once: true }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-5"
+            >
               {repos.map((repo) => {
                 const langColor = LANG_COLORS[repo.language] ?? "#8b5cf6";
                 return (
-                  <a
+                  <motion.a
+                    variants={fadeInUp}
+                    whileHover={{ y: -10, scale: 1.02 }}
                     key={repo.id}
                     href={repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="glass-panel border border-glass-border p-5 rounded-2xl flex flex-col justify-between card-hover-glow group cursor-pointer"
+                    className="glass-panel border border-glass-border p-7 rounded-[2rem] flex flex-col justify-between card-hover-glow group cursor-pointer shadow-lg h-full"
+                    aria-label={`View repository ${repo.name} on GitHub`}
                   >
                     <div>
-                      <div className="flex items-center gap-2 mb-3">
-                        <BookOpen className="w-4 h-4 text-muted shrink-0 group-hover:text-primary transition-colors" />
-                        <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors truncate">
+                      <div className="flex items-center gap-3 mb-5">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                          <BookOpen className="w-5 h-5" />
+                        </div>
+                        <h3 className="font-bold text-base text-foreground group-hover:text-primary transition-colors truncate">
                           {repo.name}
                         </h3>
-                        <ExternalLink className="w-3.5 h-3.5 text-muted/50 group-hover:text-primary/60 transition-colors ml-auto shrink-0 opacity-0 group-hover:opacity-100" />
                       </div>
-                      <p className="text-xs text-muted line-clamp-2 leading-relaxed">
-                        {repo.description || "No description provided."}
+                      <p className="text-sm text-muted line-clamp-2 leading-relaxed mb-6 font-medium">
+                        {repo.description || "Building something amazing for the open-source community."}
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/30 text-[11px] text-muted">
-                      <div className="flex items-center gap-3">
-                        {repo.stargazers_count > 0 && (
-                          <span className="flex items-center gap-1">
-                            <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                            {repo.stargazers_count}
-                          </span>
-                        )}
-                        {repo.forks_count > 0 && (
-                          <span className="flex items-center gap-1">
-                            <GitFork className="w-3.5 h-3.5" />
-                            {repo.forks_count}
-                          </span>
-                        )}
+                    <div className="flex items-center justify-between pt-6 border-t border-border/40 text-xs font-bold text-muted">
+                      <div className="flex items-center gap-4">
+                        <span className="flex items-center gap-1.5 hover:text-amber-500 transition-colors">
+                          <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                          {repo.stargazers_count}
+                        </span>
+                        <span className="flex items-center gap-1.5 hover:text-primary transition-colors">
+                          <GitFork className="w-4 h-4" />
+                          {repo.forks_count}
+                        </span>
                       </div>
                       {repo.language && (
-                        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/40 font-semibold">
+                        <span className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary/80 border border-border/50">
                           <span
-                            className="lang-dot"
+                            className="w-2 h-2 rounded-full"
                             style={{ backgroundColor: langColor }}
                           />
                           {repo.language}
                         </span>
                       )}
                     </div>
-                  </a>
+                  </motion.a>
                 );
               })}
-            </div>
+            </motion.div>
 
             {/* View all CTA */}
             <div className="flex justify-center mt-10">

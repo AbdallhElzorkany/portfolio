@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import ThemeToggle from "./ThemeToggle";
 import { Menu, X } from "lucide-react";
+import { motion } from "motion/react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -45,41 +46,54 @@ export default function Navbar() {
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <motion.header
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "py-3 glass-panel shadow-sm border-b border-glass-border"
-          : "py-5 bg-transparent border-b border-transparent"
+          ? "py-3 glass-panel shadow-lg shadow-primary/5 border-b border-glass-border backdrop-blur-md"
+          : "py-6 bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <a
           href="#"
-          className="text-xl font-bold tracking-tight text-foreground transition-colors hover:opacity-90 flex items-center gap-1"
+          className="text-2xl font-bold tracking-tighter text-foreground transition-all hover:scale-105 flex items-center gap-1.5 group"
+          aria-label="Back to top"
         >
-          <span className="gradient-text font-extrabold">Abdallah</span>
-          <span className="font-semibold text-foreground/80">.dev</span>
+          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all">
+            <span className="text-lg font-black italic">A</span>
+          </div>
+          <span className="hidden sm:inline-block">
+            <span className="font-extrabold text-foreground">Abdallah</span>
+            <span className="font-medium text-muted">.dev</span>
+          </span>
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-2 p-1.5 rounded-2xl bg-secondary/50 border border-border/40 backdrop-blur-sm">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className={`relative text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200 ${
+              className={`relative text-sm font-bold px-5 py-2.5 rounded-xl transition-all duration-300 ${
                 activeSection === link.id
-                  ? "text-primary bg-primary/8"
-                  : "text-muted hover:text-foreground hover:bg-secondary/80"
+                  ? "text-primary"
+                  : "text-muted hover:text-foreground hover:bg-secondary"
               }`}
             >
               {link.name}
               {activeSection === link.id && (
-                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary" />
+                <motion.span
+                  layoutId="activeNavTab"
+                  className="absolute inset-0 bg-white dark:bg-primary/10 shadow-sm border border-border/50 rounded-xl -z-10"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
               )}
             </a>
           ))}
-          <div className="w-px h-5 bg-border/60 mx-2" />
+          <div className="w-px h-6 bg-border/80 mx-2" />
           <ThemeToggle />
         </nav>
 
@@ -98,27 +112,36 @@ export default function Navbar() {
 
       {/* Mobile Navigation Drawer */}
       <div
-        className={`md:hidden absolute top-full left-0 right-0 glass-panel border-b border-glass-border overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileMenuOpen ? "max-h-72 opacity-100 py-4 shadow-lg" : "max-h-0 opacity-0 py-0"
+        className={`md:hidden absolute top-full left-0 right-0 glass-panel border-b border-glass-border overflow-hidden transition-all duration-500 ease-[0.22, 1, 0.36, 1] ${
+          mobileMenuOpen ? "max-h-[30rem] opacity-100 py-6 shadow-2xl" : "max-h-0 opacity-0 py-0"
         }`}
       >
-        <nav className="flex flex-col px-6 gap-1">
+        <nav className="flex flex-col px-6 gap-2">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
-              className={`text-base font-medium py-3 px-3 rounded-xl border transition-colors ${
+              className={`text-lg font-bold py-4 px-5 rounded-2xl border-2 transition-all active:scale-95 ${
                 activeSection === link.id
-                  ? "text-primary bg-primary/8 border-primary/20"
-                  : "text-muted hover:text-foreground border-transparent hover:bg-secondary/60"
+                  ? "text-primary bg-primary/5 border-primary/20 shadow-inner"
+                  : "text-muted hover:text-foreground border-transparent hover:bg-secondary/80"
               }`}
             >
-              {link.name}
+              <div className="flex items-center justify-between">
+                {link.name}
+                {activeSection === link.id && (
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="w-2 h-2 rounded-full bg-primary"
+                  />
+                )}
+              </div>
             </a>
           ))}
         </nav>
       </div>
-    </header>
+    </motion.header>
   );
 }

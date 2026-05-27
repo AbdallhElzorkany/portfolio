@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ExternalLink, FolderGit2, Rocket } from "lucide-react";
 import { Github } from "@/components/icons";
+import { motion } from "motion/react";
 
 interface Project {
   title: string;
@@ -11,6 +12,24 @@ interface Project {
   github: string;
   live: string;
 }
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-100px" },
+  transition: { duration: 0.6, ease: "easeOut" }
+};
+
+const staggerContainer = {
+  initial: { opacity: 0 },
+  whileInView: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  },
+  viewport: { once: true, margin: "-100px" }
+};
 
 // Fallback data from the resume
 const staticProjects: Project[] = [
@@ -96,6 +115,15 @@ const enhanceProjectData = (
   };
 };
 
+interface GithubRepo {
+  name: string;
+  description: string;
+  html_url: string;
+  homepage: string;
+  topics: string[];
+  language: string;
+}
+
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -108,7 +136,7 @@ export default function Projects() {
         const data = await res.json();
 
         if (Array.isArray(data) && data.length > 0) {
-          const mapped = data.map((repo: any) =>
+          const mapped = data.map((repo: GithubRepo) =>
             enhanceProjectData(
               repo.name,
               repo.description,
@@ -139,7 +167,13 @@ export default function Projects() {
 
       <div className="max-w-6xl mx-auto px-6">
         {/* Section Title */}
-        <div className="flex flex-col items-center text-center mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center text-center mb-20"
+        >
           <div className="section-label">
             <Rocket className="w-3 h-3" />
             Portfolio
@@ -151,28 +185,27 @@ export default function Projects() {
             Selected work showcasing my skills in building real-world applications.
           </p>
           <div className="w-12 h-1 bg-gradient-to-r from-primary to-accent rounded-full mt-5" />
-        </div>
+        </motion.div>
 
         {/* Loading Skeletons */}
         {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-            {[1, 2, 3, 4].map((i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[1, 2].map((i) => (
               <div
                 key={i}
-                className="glass-panel border border-glass-border rounded-3xl overflow-hidden h-80 flex flex-col"
+                className="glass-panel border border-glass-border rounded-[2rem] overflow-hidden h-[32rem] flex flex-col"
               >
-                <div className="h-1.5 shimmer" />
-                <div className="p-7 flex flex-col gap-4 flex-1 animate-pulse">
-                  <div className="h-4 bg-border rounded-md w-20" />
-                  <div className="h-6 bg-border rounded-md w-3/4" />
-                  <div className="space-y-2">
-                    <div className="h-3.5 bg-border rounded-md w-full" />
-                    <div className="h-3.5 bg-border rounded-md w-5/6" />
-                    <div className="h-3.5 bg-border rounded-md w-2/3" />
+                <div className="h-64 w-full bg-secondary/40 animate-pulse" />
+                <div className="p-8 flex flex-col gap-4 flex-1">
+                  <div className="h-8 bg-secondary/60 rounded-xl w-3/4 animate-pulse" />
+                  <div className="space-y-3 mt-2">
+                    <div className="h-4 bg-secondary/40 rounded-lg w-full animate-pulse" />
+                    <div className="h-4 bg-secondary/40 rounded-lg w-5/6 animate-pulse" />
+                    <div className="h-4 bg-secondary/40 rounded-lg w-2/3 animate-pulse" />
                   </div>
                   <div className="flex gap-2 mt-auto">
                     {[1, 2, 3].map((j) => (
-                      <div key={j} className="h-5 bg-border rounded-md w-14" />
+                      <div key={j} className="h-6 bg-secondary/40 rounded-lg w-16 animate-pulse" />
                     ))}
                   </div>
                 </div>
@@ -183,74 +216,122 @@ export default function Projects() {
 
         {/* Projects list */}
         {!loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+          <motion.div 
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
+          >
             {projects.map((project, idx) => (
-              <div
+              <motion.div
+                variants={fadeInUp}
+                whileHover={{ y: -10 }}
                 key={idx}
-                className="glass-panel border border-glass-border rounded-3xl overflow-hidden shadow-xs flex flex-col group card-hover-glow"
+                className="glass-panel border border-glass-border rounded-[2rem] overflow-hidden shadow-xl flex flex-col group card-hover-glow h-full"
               >
-                {/* Top accent bar */}
-                <div className={`h-1 bg-gradient-to-r ${ACCENT_GRADIENTS[idx % ACCENT_GRADIENTS.length]}`} />
+                {/* Project Preview Area (Thumbnail) */}
+                <div className="relative h-64 w-full overflow-hidden bg-secondary/50">
+                  <div className={`absolute inset-0 opacity-20 bg-gradient-to-br ${ACCENT_GRADIENTS[idx % ACCENT_GRADIENTS.length]} transition-transform duration-500 group-hover:scale-110`} />
+                  
+                  {/* Decorative Project Icon/Visual */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <motion.div 
+                      whileHover={{ rotate: 5, scale: 1.1 }}
+                      className={`p-6 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl transition-all duration-500 group-hover:bg-white/20`}
+                    >
+                      <FolderGit2 className="w-16 h-16 text-foreground/80 group-hover:text-primary transition-colors" />
+                    </motion.div>
+                  </div>
 
-                <div className="p-7 flex flex-col flex-1">
-                  {/* Header */}
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <div className="flex items-center gap-2 text-primary">
-                      <div className="p-1.5 rounded-lg bg-primary/10">
-                        <FolderGit2 className="w-4 h-4" />
-                      </div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted">
-                        Project {String(idx + 1).padStart(2, "0")}
-                      </span>
+                  {/* Badge */}
+                  <div className="absolute top-6 left-6">
+                    <div className="px-4 py-1.5 rounded-full glass-panel border border-white/20 text-[10px] font-bold uppercase tracking-widest text-foreground/80 shadow-sm">
+                      Project {String(idx + 1).padStart(2, "0")}
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-primary transition-colors leading-snug">
+                  {/* Hover Overlay with Link */}
+                  <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                    <div className="flex gap-4">
+                      <a 
+                        href={project.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-4 rounded-2xl bg-white text-primary shadow-xl hover:scale-110 transition-transform"
+                        title="View Source Code"
+                      >
+                        <Github className="w-6 h-6" />
+                      </a>
+                      {project.live !== "#" && project.live !== "" && (
+                        <a 
+                          href={project.live} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="p-4 rounded-2xl bg-primary text-white shadow-xl hover:scale-110 transition-transform"
+                          title="View Live Demo"
+                        >
+                          <ExternalLink className="w-6 h-6" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-8 flex flex-col flex-1">
+                  <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors leading-tight">
                     {project.title}
                   </h3>
-                  <p className="text-sm text-muted leading-relaxed mb-6 flex-1">
+                  <p className="text-muted text-sm leading-relaxed mb-8 flex-1">
                     {project.description}
                   </p>
 
                   {/* Tech tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-5">
+                  <div className="flex flex-wrap gap-2 mb-8">
                     {project.tech.map((tag) => (
-                      <span
+                      <motion.span
+                        whileHover={{ y: -1, scale: 1.05 }}
                         key={tag}
-                        className="px-2 py-0.5 rounded-md bg-secondary/80 text-[10px] font-bold text-muted border border-border/40 uppercase tracking-wide"
+                        className="px-3 py-1 rounded-lg bg-secondary/80 text-[10px] font-bold text-muted border border-border/40 uppercase tracking-wide transition-colors hover:border-primary/30 hover:text-primary"
                       >
                         {tag}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
 
-                  {/* Links */}
-                  <div className="flex items-center gap-4 border-t border-border/40 pt-5">
+                  {/* Footer Links */}
+                  <div className="flex items-center justify-between pt-6 border-t border-border/40">
                     <a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-foreground transition-colors"
+                      className="flex items-center gap-2 text-xs font-bold text-muted hover:text-primary transition-colors"
+                      aria-label={`View source code for ${project.title}`}
                     >
-                      <Github className="w-4 h-4" />
+                      <Github className="w-4.5 h-4.5" />
                       Source Code
                     </a>
-                    {project.live !== "#" && project.live !== "" && (
+                    {project.live !== "#" && project.live !== "" ? (
                       <a
                         href={project.live}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors ml-auto"
+                        className="flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+                        aria-label={`View live demo of ${project.title}`}
                       >
-                        <ExternalLink className="w-4 h-4" />
                         Live Demo
+                        <ExternalLink className="w-4.5 h-4.5" />
                       </a>
+                    ) : (
+                      <span className="text-[10px] font-bold text-muted/50 uppercase tracking-widest">
+                        Internal Project
+                      </span>
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </section>
