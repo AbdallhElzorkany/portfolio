@@ -20,22 +20,42 @@ export default function Navbar() {
 
   useEffect(() => {
     const sectionIds = ["about", "skills", "projects", "contact"];
-    const observers: IntersectionObserver[] = [];
+    
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // If we are at the very top of the page, clear active section
+      if (window.scrollY < 100) {
+        setActiveSection("");
+        return;
+      }
 
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActiveSection(id);
-        },
-        { rootMargin: "-40% 0px -55% 0px" }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
+      // If we're within 50px of the bottom, set active to contact
+      if (scrollPosition >= documentHeight - 50) {
+        setActiveSection("contact");
+        return;
+      }
 
-    return () => observers.forEach((o) => o.disconnect());
+      // Standard intersection logic for other sections
+      for (const id of sectionIds) {
+        const section = document.getElementById(id);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          // If the top of the section is in the top half of the viewport
+          if (rect.top <= 200 && rect.bottom >= 200) {
+            setActiveSection(id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Run once on mount to set initial state
+    handleScroll();
+    
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
@@ -50,13 +70,13 @@ export default function Navbar() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "py-3 glass-panel shadow-lg shadow-primary/5 border-b border-glass-border backdrop-blur-md"
-          : "py-6 bg-transparent border-b border-transparent"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div className={`transition-all duration-500 flex items-center justify-between pointer-events-auto ${
+        scrolled
+          ? "w-[calc(100%-2rem)] max-w-6xl mt-4 py-3 px-6 glass-panel shadow-2xl shadow-primary/10 border border-glass-border rounded-3xl backdrop-blur-xl"
+          : "w-full max-w-7xl py-6 px-6 bg-transparent border-b border-transparent"
+      }`}>
         <a
           href="#"
           className="text-2xl font-bold tracking-tighter text-foreground transition-all hover:scale-105 flex items-center gap-1.5 group"
@@ -112,8 +132,8 @@ export default function Navbar() {
 
       {/* Mobile Navigation Drawer */}
       <div
-        className={`md:hidden absolute top-full left-0 right-0 glass-panel border-b border-glass-border overflow-hidden transition-all duration-500 ease-[0.22, 1, 0.36, 1] ${
-          mobileMenuOpen ? "max-h-[30rem] opacity-100 py-6 shadow-2xl" : "max-h-0 opacity-0 py-0"
+        className={`md:hidden absolute top-[calc(100%+1rem)] left-4 right-4 glass-panel border border-glass-border rounded-3xl overflow-hidden transition-all duration-500 ease-[0.22, 1, 0.36, 1] ${
+          mobileMenuOpen ? "max-h-[30rem] opacity-100 py-6 shadow-2xl" : "max-h-0 opacity-0 py-0 border-none"
         }`}
       >
         <nav className="flex flex-col px-6 gap-2">

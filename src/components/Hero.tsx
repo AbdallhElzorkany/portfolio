@@ -20,7 +20,7 @@ const staggerContainer = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden dot-grid">
+    <section className="relative min-h-screen flex items-center justify-center pt-28 sm:pt-32 overflow-hidden dot-grid">
       {/* Radial glows */}
       <motion.div 
         initial={{ opacity: 0 }}
