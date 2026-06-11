@@ -45,7 +45,7 @@ const contactItems = [
   {
     icon: MapPin,
     label: "Location",
-    value: "Tanta, Gharbia, Egypt",
+    value: "El Mahalla El Kubra, Gharbia, Egypt",
     href: null,
     description: "Open to remote work and relocation.",
     color: "amber-500",
@@ -157,7 +157,7 @@ export default function Contact() {
           initial="initial"
           whileInView="whileInView"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-24"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24"
         >
           {contactItems.map((item, idx) => {
             const Icon = item.icon;
@@ -198,7 +198,7 @@ export default function Contact() {
                     {item.copyable && (
                       <button
                         onClick={() => handleCopy(item.value)}
-                        className="flex items-center gap-2 text-xs font-bold text-muted hover:text-primary transition-all py-2 px-4 rounded-xl hover:bg-primary/10 border border-transparent hover:border-primary/20 mt-2"
+                        className="flex items-center cursor-pointer gap-2 text-xs font-bold text-muted hover:text-primary transition-all py-2 px-4 rounded-xl hover:bg-primary/10 border border-transparent hover:border-primary/20 mt-2"
                         aria-label={`Copy ${item.label}`}
                       >
                         {isCopied ? (

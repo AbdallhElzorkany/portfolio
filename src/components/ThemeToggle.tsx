@@ -43,10 +43,10 @@ export default function ThemeToggle() {
 
   return (
     <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.2 }}
+      whileTap={{ scale: 0.8 }}
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-secondary/80 hover:bg-secondary-foreground/10 text-foreground transition-all duration-300 border border-border flex items-center justify-center cursor-pointer relative overflow-hidden group shadow-xs"
+      className="p-2 rounded-lg  text-foreground transition-all duration-300 flex items-center justify-center cursor-pointer relative overflow-hidden group"
       aria-label="Toggle Theme"
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -55,7 +55,7 @@ export default function ThemeToggle() {
           initial={{ y: -20, opacity: 0, rotate: -45 }}
           animate={{ y: 0, opacity: 1, rotate: 0 }}
           exit={{ y: 20, opacity: 0, rotate: 45 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
+          transition={{ duration: 0.2, ease: "linear" }}
           className="relative w-5 h-5 flex items-center justify-center"
         >
           {theme === "dark" ? (

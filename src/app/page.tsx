@@ -30,7 +30,7 @@ export default function Home() {
 
       <footer className="border-t border-border/40 bg-secondary/10 relative overflow-hidden">
         {/* Top accent line */}
-        <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+        <div className="h-px bg-linear-to-r from-transparent via-primary/40 to-transparent" />
 
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
