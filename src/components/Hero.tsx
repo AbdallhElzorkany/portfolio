@@ -22,29 +22,33 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-28 sm:pt-32 overflow-hidden dot-grid">
       {/* Radial glows */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.4, 0.65, 0.4] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-[300px] sm:w-[450px] h-[300px] sm:h-[450px] rounded-full bg-primary/15 dark:bg-primary/12 blur-[100px] sm:blur-[130px] -z-10" 
+        className="absolute top-1/4 left-1/4 w-[300px] sm:w-[450px] h-[300px] sm:h-[450px] rounded-full bg-primary/15 dark:bg-primary/12 blur-[100px] sm:blur-[130px] -z-10"
       />
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.4, 0.6, 0.4] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-        className="absolute bottom-1/4 right-1/4 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px] rounded-full bg-accent/15 dark:bg-accent/10 blur-[100px] sm:blur-[120px] -z-10" 
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 3,
+        }}
+        className="absolute bottom-1/4 right-1/4 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px] rounded-full bg-accent/15 dark:bg-accent/10 blur-[100px] sm:blur-[120px] -z-10"
       />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full bg-primary/5 blur-[60px] -z-10" />
 
-      <motion.div 
+      <motion.div
         variants={staggerContainer}
         initial="initial"
         animate="animate"
         className="max-w-4xl mx-auto px-6 text-center flex flex-col items-center"
       >
-
         {/* Availability Badge */}
-        <motion.div 
+        <motion.div
           variants={fadeInUp}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-glass-border text-xs font-semibold text-primary mb-8 shadow-sm"
         >
@@ -61,9 +65,7 @@ export default function Hero() {
           className="text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tight leading-[1.05] mb-8 text-balance"
         >
           Engineering Digital <br className="hidden md:block" />
-          <span className="gradient-text">
-            Experiences with Purpose
-          </span>
+          <span className="gradient-text">Experiences with Purpose</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -72,8 +74,9 @@ export default function Hero() {
           className="text-lg sm:text-xl text-muted max-w-2xl mb-12 leading-relaxed font-medium text-balance"
         >
           Hi, I&apos;m{" "}
-          <span className="text-foreground font-bold">Abdallah Elzorkany</span>
-          . I specialize in building high-performance, accessible, and scalable web applications using the modern React ecosystem.
+          <span className="text-foreground font-bold">Abdallah Elzorkany</span>.
+          I specialize in building high-performance, accessible, and scalable
+          web applications using the modern React ecosystem.
         </motion.p>
 
         {/* Call to Actions */}
@@ -104,7 +107,7 @@ export default function Hero() {
           <motion.a
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.98 }}
-            href="/Abdallah_Elzorkany_Resume_classic (2).pdf"
+            href="https://drive.google.com/file/d/1VZhaJjsw2lmDJ9SBUXHKPc0pZoTVTq7m/view"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 h-14 px-8 rounded-2xl bg-secondary hover:bg-secondary/80 border border-border hover:border-primary/30 text-foreground font-bold transition-all duration-300 cursor-pointer"
@@ -164,7 +167,9 @@ export default function Hero() {
         transition={{ delay: 1, duration: 1 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted/60">Scroll</span>
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted/60">
+          Scroll
+        </span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
