@@ -159,25 +159,6 @@ export default function Hero() {
           </motion.a>
         </motion.div>
       </motion.div>
-
-      {/* Scroll Down Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted/60">
-          Scroll
-        </span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="p-2 rounded-full border border-border/50 bg-secondary/30 backdrop-blur-sm"
-        >
-          <ChevronDown className="w-4 h-4 text-muted" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }
