@@ -107,7 +107,7 @@ export default function Hero() {
           <motion.a
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.98 }}
-            href="https://drive.google.com/file/d/1uZqqGCc9wn1XAsWfnnQMvWWCgBlpjDWR/view"
+            href="https://drive.google.com/file/d/1zU3kYRYQ5TP7eaRYRWTAOWLPYbOk5vZ9/view"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 h-14 px-8 rounded-2xl bg-secondary hover:bg-secondary/80 border border-border hover:border-primary/30 text-foreground font-bold transition-all duration-300 cursor-pointer"
